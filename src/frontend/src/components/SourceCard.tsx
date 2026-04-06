@@ -1,5 +1,6 @@
-import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, ExternalLink, Link } from "lucide-react";
 import { useRef, useState } from "react";
+import { toast } from "sonner";
 import type { Source } from "../backend.d";
 
 interface SourceCardsProps {
@@ -23,6 +24,17 @@ export function SourceCards({ sources }: SourceCardsProps) {
       left: dir === "left" ? -240 : 240,
       behavior: "smooth",
     });
+  }
+
+  async function handleCopyUrl(e: React.MouseEvent, url: string) {
+    e.preventDefault();
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("URL copied");
+    } catch {
+      toast.error("Failed to copy URL");
+    }
   }
 
   return (
@@ -70,7 +82,7 @@ export function SourceCards({ sources }: SourceCardsProps) {
             target="_blank"
             rel="noopener noreferrer"
             data-ocid={`sources.item.${i + 1}`}
-            className="nx-source-card flex-shrink-0 w-52 rounded-2xl p-3.5 cursor-pointer no-underline block"
+            className="group nx-source-card flex-shrink-0 w-52 rounded-2xl p-3.5 cursor-pointer no-underline block relative"
           >
             <div className="flex items-center gap-2 mb-1.5">
               <img
@@ -89,6 +101,16 @@ export function SourceCards({ sources }: SourceCardsProps) {
             <p className="text-[color:var(--nx-text-muted)] text-xs leading-relaxed line-clamp-2">
               {source.snippet}
             </p>
+            {/* Quick copy URL button - hover reveal */}
+            <button
+              type="button"
+              onClick={(e) => handleCopyUrl(e, source.url)}
+              data-ocid={`sources.copy_url_button.${i + 1}`}
+              className="absolute top-2 right-2 flex items-center justify-center w-6 h-6 rounded-lg bg-[color:var(--nx-surface-solid)] border border-[color:var(--nx-border)] text-[color:var(--nx-text-muted)] hover:text-[color:var(--nx-cyan)] transition-all duration-200 opacity-0 group-hover:opacity-100"
+              aria-label="Copy URL"
+            >
+              <Link className="w-3 h-3" />
+            </button>
           </a>
         ))}
       </div>

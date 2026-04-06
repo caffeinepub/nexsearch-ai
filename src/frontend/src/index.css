@@ -171,9 +171,9 @@
 }
 
 .nx-search-bar:focus-within {
-  border-color: rgba(22, 214, 255, 0.35);
-  box-shadow: 0 0 0 3px rgba(22, 214, 255, 0.12), 0 0 30px
-    rgba(22, 214, 255, 0.06);
+  border-color: rgba(22, 214, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(22, 214, 255, 0.15), 0 0 40px
+    rgba(22, 214, 255, 0.1), inset 0 0 20px rgba(22, 214, 255, 0.03);
 }
 
 .light .nx-search-bar,
@@ -208,6 +208,140 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Bottom navigation glassmorphism */
+.nx-bottom-nav {
+  background: rgba(7, 10, 20, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.light .nx-bottom-nav,
+:root:not(.dark) .nx-bottom-nav {
+  background: rgba(240, 244, 255, 0.92);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Cyber glow shadow */
+.shadow-cyan {
+  box-shadow: 0 0 20px rgba(22, 214, 255, 0.2);
+}
+
+/* ============================================
+   Phase 3: Streaming cursor
+   ============================================ */
+@keyframes cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.nx-stream-cursor::after {
+  content: "|";
+  animation: cursor-blink 0.7s ease infinite;
+  color: var(--nx-cyan);
+  margin-left: 1px;
+  font-weight: 300;
+}
+
+/* ============================================
+   Phase 3: Ambient orb float animation
+   ============================================ */
+@keyframes float-orb {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.08);
+    opacity: 0.55;
+  }
+}
+
+.nx-orb {
+  animation: float-orb 7s ease-in-out infinite;
+}
+
+/* ============================================
+   Phase 3: Source card stagger-in
+   ============================================ */
+@keyframes slide-up-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.nx-source-stagger-container .nx-source-card {
+  animation: slide-up-fade 0.35s ease forwards;
+  opacity: 0;
+}
+
+.nx-source-stagger-container > div > div > a:nth-child(1) {
+  animation-delay: 0ms;
+}
+.nx-source-stagger-container > div > div > a:nth-child(2) {
+  animation-delay: 60ms;
+}
+.nx-source-stagger-container > div > div > a:nth-child(3) {
+  animation-delay: 120ms;
+}
+.nx-source-stagger-container > div > div > a:nth-child(4) {
+  animation-delay: 180ms;
+}
+.nx-source-stagger-container > div > div > a:nth-child(5) {
+  animation-delay: 240ms;
+}
+
+/* ============================================
+   Phase 3: Sidebar active item — left accent bar
+   ============================================ */
+.nx-sidebar-item-active {
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  border-left: 2px solid var(--nx-cyan);
+  padding-left: calc(0.75rem - 2px);
+}
+
+.light .nx-sidebar-item-active,
+:root:not(.dark) .nx-sidebar-item-active {
+  background: rgba(0, 120, 180, 0.1);
+  border-left: 2px solid var(--nx-cyan);
+  padding-left: calc(0.75rem - 2px);
+}
+
+/* ============================================
+   Phase 3: User avatar pulse dot
+   ============================================ */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+}
+
+.nx-pulse-dot {
+  animation: pulse-dot 2.5s ease-in-out infinite;
+}
+
+/* ============================================
+   Core animations
+   ============================================ */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -234,6 +368,20 @@
   }
   100% {
     background-position: 200% center;
+  }
+}
+
+/* Typing indicator bounce animation */
+@keyframes bounce-dot {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-6px);
+    opacity: 1;
   }
 }
 
@@ -281,14 +429,8 @@
   transform: translateY(-1px);
 }
 
-.nx-sidebar-item-active {
-  background: rgba(255, 255, 255, 0.07);
-  border-radius: 10px;
-}
-
-.light .nx-sidebar-item-active,
-:root:not(.dark) .nx-sidebar-item-active {
-  background: rgba(0, 120, 180, 0.1);
+.nx-typing-dot {
+  animation: bounce-dot 1.4s ease-in-out infinite;
 }
 
 .nx-scrollbar::-webkit-scrollbar {
@@ -390,6 +532,21 @@
     transform: none !important;
   }
   .nx-skeleton {
+    animation: none !important;
+  }
+  .nx-typing-dot {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+  .nx-orb {
+    animation: none !important;
+    opacity: 0.3 !important;
+  }
+  .nx-stream-cursor::after {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+  .nx-pulse-dot {
     animation: none !important;
   }
 }
